@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+
+	<!-- Define the file appender -->
+	<!-- <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>logs/app.log</file>
+		<append>true</append> Set to false to overwrite log file each time
+		<encoder>
+			<pattern>%d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %-5p %C{1}.%L - %m%n</pattern>
+		</encoder>
+	</appender> -->
+	
+	<!-- Define the rolling file appender -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+        
+         <!-- Define a rolling policy based on file size -->
+	<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+		<fileNamePattern>logs/app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+		<maxFileSize>10MB</maxFileSize> <!-- Rolls over after reaching 10MB -->
+		<maxHistory>30</maxHistory> <!-- Keeps logs for 30 days -->
+	</rollingPolicy>
+        
         <encoder>
             <pattern>%d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %-5p %C{1}.%L - %m%n</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="consoleAppender"/>
-    </root>
+	<appender name="consoleAppender"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd/HH:mm:ss.SSS/zzz} [%t] %-5p %C{1}.%L - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="info">
+<!-- 		<appender-ref ref="FILE" /> -->
+		<appender-ref ref="ROLLING_FILE" />
+		<appender-ref ref="consoleAppender" />
+	</root>
 </configuration>
